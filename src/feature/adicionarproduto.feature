@@ -1,4 +1,5 @@
-Feature: 
+Feature: Fluxos possiveis de compra
+ 
 Scenario: Adicionar um produto ao carrinho
 	Given Usuario esta na Home Page
 	When Usuario busca um produto
