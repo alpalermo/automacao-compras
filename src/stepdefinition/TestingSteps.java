@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -90,8 +91,8 @@ public class TestingSteps {
 		}
 	}
 	
-	@When("^Usuario clica em continuar$")
-	public void usuario_clica_em_continuar() throws InterruptedException {
+	@When("^Usuario clica em sim continuar$")
+	public void usuario_clica_em_sim_continuar() throws InterruptedException {
 		try {
 			wait = new WebDriverWait(driver, 3);
 
@@ -99,11 +100,54 @@ public class TestingSteps {
 					ExpectedConditions.elementToBeClickable(By.xpath("//a[@value='Sim, continuar']")));
 			simContinuarButton.click();
 
+		} catch(Exception e) {
+			System.out.println("Botão não encontrado!");
+		}
+	}
+	
+	@When("^Usuario clica em continuar$")
+	public void usuario_clica_em_continuar() throws InterruptedException {
+		try {
+			wait = new WebDriverWait(driver, 3);
+
 			WebElement continuarButton = wait.until(
 					ExpectedConditions.elementToBeClickable(By.id("btn-continue")));
 			continuarButton.click();
 		} catch(Exception e) {
 			System.out.println("Botão não encontrado!");
+		}
+	}
+	
+	@When("^Usuario clica em garantia 12 meses$")
+	public void usuario_clica_em_garantia_12_meses() throws InterruptedException {
+		try {
+			wait = new WebDriverWait(driver, 3);
+
+			WebElement continuarButton = wait.until(
+					ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='+ 12 meses']")));
+			continuarButton.click();
+		} catch(Exception e) {
+			System.out.println("Botão não encontrado!");
+		}
+	}
+
+	@Then("^Garantia extendida marcada$")
+	public void garantia_extendida_marcada() {
+		try {
+			wait = new WebDriverWait(driver, 10);
+		
+			WebElement resumoProdutoExibido = wait.until(
+					ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//a[@title='Monitor LG Ajustável 23,8” Full HD IPS LED 1920x1080 VGA HDMI DisplayPort 24BL550J']"))));
+			
+	        if(driver.findElement(By.xpath("//input[@type='checkbox']")).isSelected()) {
+	            System.out.println("True");
+	        } else {
+	            System.out.println("False");
+	        }
+
+			System.out.println("Produto exibido" + resumoProdutoExibido);
+		} catch(Exception e) {
+			System.out.println("Produto não encontrado!");
 		}
 	}
 	
@@ -144,13 +188,21 @@ public class TestingSteps {
 			WebElement inputPassword = wait.until(
 					ExpectedConditions.visibilityOf(driver.findElement(By.id("password-input"))));
 			WebElement loginButton = wait.until(
-					ExpectedConditions.visibilityOf(driver.findElement(By.id("loginButton"))));
+					ExpectedConditions.visibilityOf(driver.findElement(By.id("login-button"))));
 
 			System.out.println("Tela de login exibida" + inputEmail + "" + inputPassword + "" + loginButton);
 		} catch(Exception e) {
 			System.out.println("Elementos não encontrados!");
-		}
-			
+		}			
 	}
+	
+	@After
+	public void cleanUp(){
+    	System.out.println("Releasing resources now.....");
+    	if (null != driver) {
+    		driver.close();
+    		driver.quit();
+    	}
+    }
 	
 }
