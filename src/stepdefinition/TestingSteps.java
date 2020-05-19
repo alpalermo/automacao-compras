@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -20,10 +21,14 @@ public class TestingSteps {
 	static WebDriver driver;
 	WebDriverWait wait = null;
 	
-	@Given("^Usuario esta na Home Page$")
-	public void user_is_on_Home_Page() {
+	@Before
+	public void setUp(){
 		System.setProperty("webdriver.chrome.driver", "webdrivers/chromedriver");
 		driver = new ChromeDriver();
+    }
+	
+	@Given("^Usuario esta na Home Page$")
+	public void user_is_on_Home_Page() {
 		String baseURL = "http://www.americanas.com.br/";
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);	
@@ -140,9 +145,9 @@ public class TestingSteps {
 					ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//a[@title='Monitor LG Ajustável 23,8” Full HD IPS LED 1920x1080 VGA HDMI DisplayPort 24BL550J']"))));
 			
 	        if(driver.findElement(By.xpath("//input[@type='checkbox']")).isSelected()) {
-	            System.out.println("True");
+	            System.out.println("Garantia extendida de 12 meses adicionada!");
 	        } else {
-	            System.out.println("False");
+	            System.out.println("Sem garantia extendida!");
 	        }
 
 			System.out.println("Produto exibido" + resumoProdutoExibido);
