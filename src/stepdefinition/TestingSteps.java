@@ -17,6 +17,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+import static org.junit.Assert.*;
+
 public class TestingSteps {
 	static WebDriver driver;
 	WebDriverWait wait = null;
@@ -123,34 +125,32 @@ public class TestingSteps {
 		}
 	}
 	
-	@When("^Usuario clica em garantia 12 meses$")
-	public void usuario_clica_em_garantia_12_meses() throws InterruptedException {
+	@When("^Usuario clica em \"([^\"]*)\" 12 meses$")
+	public void usuario_clica_em_garantia_12_meses(boolean garantia) throws InterruptedException {
 		try {
 			wait = new WebDriverWait(driver, 3);
 
 			WebElement continuarButton = wait.until(
 					ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='+ 12 meses']")));
-			continuarButton.click();
+			if (garantia) {
+				continuarButton.click();				
+			}
 		} catch(Exception e) {
 			System.out.println("Botão não encontrado!");
 		}
 	}
 
-	@Then("^Garantia extendida marcada$")
-	public void garantia_extendida_marcada() {
+	@Then("^Verifica \"([^\"]*)\" extendida$")
+	public void garantia_extendida_marcada(boolean garantia) {
 		try {
 			wait = new WebDriverWait(driver, 10);
 		
 			WebElement resumoProdutoExibido = wait.until(
 					ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//a[@title='Monitor LG Ajustável 23,8” Full HD IPS LED 1920x1080 VGA HDMI DisplayPort 24BL550J']"))));
-			
-	        if(driver.findElement(By.xpath("//input[@type='checkbox']")).isSelected()) {
-	            System.out.println("Garantia extendida de 12 meses adicionada!");
-	        } else {
-	            System.out.println("Sem garantia extendida!");
-	        }
-
-			System.out.println("Produto exibido" + resumoProdutoExibido);
+			if (garantia) {
+				assertTrue(driver.findElement(By.xpath("//input[@type='checkbox']")).isSelected());
+				System.out.println("Produto exibido" + resumoProdutoExibido);
+			}
 		} catch(Exception e) {
 			System.out.println("Produto não encontrado!");
 		}
